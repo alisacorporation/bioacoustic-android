@@ -53,6 +53,21 @@ cd bioacoustic-android
 Requires Android SDK + NDK 25.2 (set `sdk.dir` in `local.properties`). whisper.cpp is a git submodule pinned to a tested commit.
 ABIs: `arm64-v8a` (phones) and `x86_64` (emulator).
 
+## Desktop app
+
+The desktop version (PySide6, Linux) lives in its own repository,
+**[alisacorporation/bioacoustic](https://github.com/alisacorporation/bioacoustic)** — same design and themes:
+
+| Umbrella · recording | Neon · result |
+|---|---|
+| ![Desktop, Umbrella](docs/screenshots/desktop-umbrella-recording-sine.png) | ![Desktop, Neon](docs/screenshots/desktop-neon-result-sine.png) |
+
+- push-to-talk on a global hotkey (Right Alt) or the on-screen button
+- live voice visualisation: neon sine waves, oscilloscope + FFT spectrum
+- auto-paste into the active window (Wayland-friendly virtual keyboard)
+- whisper on the GPU (Vulkan) with automatic CPU fallback; CPU / GPU load bars
+- searchable history in the same JSON format as this app — the folders can be synced and merged
+
 ## License
 
 MIT — see [LICENSE](LICENSE). Based on the `examples/whisper.android` project of whisper.cpp.
