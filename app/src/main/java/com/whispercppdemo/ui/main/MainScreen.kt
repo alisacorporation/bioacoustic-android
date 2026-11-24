@@ -185,7 +185,7 @@ private fun Header(vm: MainScreenViewModel) {
             )
             Text(c.subtitle, style = mono(9.sp, c.dim, 1.4.sp, FontWeight.Normal), maxLines = 1)
         }
-        Chip(vm.language.uppercase(), onClick = vm::cycleLanguage)
+        LanguageChip(vm)
         Spacer(Modifier.width(6.dp))
         val (label, dot) = when (vm.phase) {
             Phase.Recording -> "ЗАПИСЬ" to c.rec
@@ -198,6 +198,36 @@ private fun Header(vm: MainScreenViewModel) {
             Canvas(Modifier.size(7.dp)) { drawCircle(dot) }
             Spacer(Modifier.width(7.dp))
             Text(label, style = mono(10.sp, c.muted))
+        }
+    }
+}
+
+/** Recognition language: explicit choice from a menu (was a tap-to-cycle chip — too easy to hit "auto" by accident). */
+private val LANGUAGES = listOf("ru" to "Русский", "en" to "English", "auto" to "Авто (определять)")
+
+@Composable
+private fun LanguageChip(vm: MainScreenViewModel) {
+    val c = LocalV2.current
+    var open by remember { mutableStateOf(false) }
+    Box {
+        Chip(vm.language.uppercase() + " ▾") { open = true }
+        androidx.compose.material3.MaterialTheme(
+            colorScheme = androidx.compose.material3.darkColorScheme(surface = c.panel2, onSurface = c.text),
+            shapes = androidx.compose.material3.Shapes(extraSmall = androidx.compose.foundation.shape.RoundedCornerShape(0.dp)),
+        ) {
+            androidx.compose.material3.DropdownMenu(
+                expanded = open, onDismissRequest = { open = false },
+                modifier = Modifier.background(c.panel2).border(1.dp, c.line),
+            ) {
+                Text("ЯЗЫК РЕЧИ", style = mono(9.sp, c.label, 1.6.sp), modifier = Modifier.padding(horizontal = 14.dp, vertical = 6.dp))
+                LANGUAGES.forEach { (code, name) ->
+                    val selected = vm.language == code
+                    androidx.compose.material3.DropdownMenuItem(
+                        text = { Text((if (selected) "✓  " else "    ") + name, style = body(14.sp, if (selected) c.accent else c.text)) },
+                        onClick = { vm.chooseLanguage(code); open = false },
+                    )
+                }
+            }
         }
     }
 }

@@ -304,10 +304,10 @@ class MainScreenViewModel(private val app: Application) : ViewModel() {
 
     fun chooseMode(m: String) { mode = m; prefs.edit().putString("mode", m).apply() }
 
-    fun cycleLanguage() {
-        val order = listOf("ru", "en", "auto")
-        language = order[(order.indexOf(language) + 1) % order.size]
+    fun chooseLanguage(code: String) {
+        language = code
         prefs.edit().putString("lang", language).apply()
+        toast("Язык распознавания: " + when (code) { "ru" -> "русский"; "en" -> "английский"; else -> "авто" }, false)
     }
 
     private fun toast(text: String, warn: Boolean) { _toasts.tryEmit(text to warn) }
